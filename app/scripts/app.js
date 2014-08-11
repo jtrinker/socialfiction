@@ -35,5 +35,3 @@ app.config(function ($routeProvider) {
       redirectTo: '/'
     });
 });
-
-app.constant('FB', 'https://socialfiction.firebaseio.com/');
