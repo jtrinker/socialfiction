@@ -8,23 +8,21 @@
  * Controller of the appApp
  */
 
-app.controller('MainCtrl', ['$scope', '$firebase', '$firebaseSimpleLogin',
-  function ($scope, $firebase, $firebaseSimpleLogin) {
-    var ref = new Firebase('https://socialfiction.firebaseio.com/');
+app.controller('MainCtrl', ['$scope', '$firebase', '$firebaseSimpleLogin', 'authSvc',
+  function ($scope, $firebase, $firebaseSimpleLogin, authSvc) {
+
+    var ref = new Firebase('https://socialfiction.firebaseio.com');
     var sync = $firebase(ref);
 
     $scope.auth = $firebaseSimpleLogin(ref);
 
     $scope.signin = function() {
-      console.log("signing in...");
-      $scope.auth.$login('password', {
-          email: 'jameson.trinker@gmail.com',
-          password: 'Gretchen8'
-        }).then(function(user) {
-          console.log('user: ', user);
-        }, function(error) {
-          console.log('error: ', error);
-        });
+      authSvc.signin();
+      console.log("signed in!");
+    }
+
+    $scope.logout = function() {
+      $scope.auth.$logout();
     }
 
     var currentUser = $scope.auth.$getCurrentUser().then(function(user, err) {
@@ -37,10 +35,15 @@ app.controller('MainCtrl', ['$scope', '$firebase', '$firebaseSimpleLogin',
     });
 
     $scope.createUser = function() {
-      $scope.auth.$createUser('jamie.smith@email.com', 'password').then(function(user) {
-        sync.child('users').child(user.uid).$set({
-          email: user.email
-        });
+      $scope.auth.$createUser('trinker@gmail.com', 'password').then(function(user, err) {
+        if (!err) {
+          ref.child('users/' + user.uid).set({
+            email: user.email
+          });
+          console.log("success!");
+        }else{
+          console.log(err.message);
+        }
       });
     }
 

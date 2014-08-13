@@ -7,6 +7,9 @@
  * # AboutCtrl
  * Controller of the appApp
  */
-app.controller('AboutCtrl', ['$scope', function ($scope) {
-
+app.controller('AboutCtrl', ['$scope', '$firebase', 'authSvc', function ($scope, $firebase, authSvc) {
+	
+	$scope.logout = function() {
+		authSvc.logout();
+	}
 }]);
