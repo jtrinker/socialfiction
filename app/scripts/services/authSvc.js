@@ -9,6 +9,10 @@ app.factory('authSvc', ['$firebase', '$firebaseSimpleLogin', function($firebase,
     logout: function logout() {
       auth.$logout();
     }
+
+    // signin: function signin() {
+    //   auth.$login();
+    // }
   }
 
 }]);
